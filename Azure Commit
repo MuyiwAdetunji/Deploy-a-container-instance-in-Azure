@@ -1,0 +1,353 @@
+Create a Container
+
+##Input
+
+muyiwa@Azure:~$ az container create --resource-group skineticsResourceGroup --name skineticc0ntainer --image mcr.microsoft.com/azuredocs/aci-helloworld --dns-name-label skinetic-demo --ports 80
+
+##Output
+
+{
+  "containers": [
+    {
+      "command": null,
+      "environmentVariables": [],
+      "image": "mcr.microsoft.com/azuredocs/aci-helloworld",
+      "instanceView": {
+        "currentState": {
+          "detailStatus": "",
+          "exitCode": null,
+          "finishTime": null,
+          "startTime": "2021-12-21T12:54:05.940000+00:00",
+          "state": "Running"
+        },
+        "events": [
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:52:43+00:00",
+            "lastTimestamp": "2021-12-21T12:52:43+00:00",
+            "message": "Successfully pulled image \"mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e\"",
+            "name": "Pulled",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:52:43+00:00",
+            "lastTimestamp": "2021-12-21T12:52:43+00:00",
+            "message": "pulling image \"mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e\"",
+            "name": "Pulling",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:54:05+00:00",
+            "lastTimestamp": "2021-12-21T12:54:05+00:00",
+            "message": "Started container",
+            "name": "Started",
+            "type": "Normal"
+          }
+        ],
+        "previousState": null,
+        "restartCount": 0
+      },
+      "livenessProbe": null,
+      "name": "skineticc0ntainer",
+      "ports": [
+        {
+          "port": 80,
+          "protocol": "TCP"
+        }
+      ],
+      "readinessProbe": null,
+      "resources": {
+        "limits": null,
+        "requests": {
+          "cpu": 1.0,
+          "gpu": null,
+          "memoryInGb": 1.5
+        }
+      },
+      "volumeMounts": null
+    }
+  ],
+  "diagnostics": null,
+  "dnsConfig": null,
+  "encryptionProperties": null,
+  "id": "/subscriptions/d83f3218-7274-4344-9020-44061080a8df/resourceGroups/skineticsResourceGroup/providers/Microsoft.ContainerInstance/containerGroups/skineticc0ntainer",
+  "identity": null,
+  "imageRegistryCredentials": null,
+  "initContainers": [],
+  "instanceView": {
+    "events": [],
+    "state": "Running"
+  },
+  "ipAddress": {
+    "dnsNameLabel": "skinetic-demo",
+    "dnsNameLabelReusePolicy": "Unsecure",
+    "fqdn": "skinetic-demo.eastus.azurecontainer.io",
+    "ip": "20.83.143.103",
+    "ports": [
+      {
+        "port": 80,
+        "protocol": "TCP"
+      }
+    ],
+    "type": "Public"
+  },
+  "location": "eastus",
+  "name": "skineticc0ntainer",
+  "osType": "Linux",
+  "provisioningState": "Succeeded",
+  "resourceGroup": "skineticsResourceGroup",
+  "restartPolicy": "Always",
+  "sku": "Standard",
+  "subnetIds": null,
+  "tags": {},
+  "type": "Microsoft.ContainerInstance/containerGroups",
+  "volumes": null,
+  "zones": null
+}
+
+Check Container Status
+
+##Input
+
+az container show --resource-group skineticsResourceGRoup --name skineticc0ntainer --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
+
+##Output
+
+FQDN                                    ProvisioningState
+--------------------------------------  -------------------
+skinetic-demo.eastus.azurecontainer.io  Succeeded
+
+
+Pull the container logs
+
+##Input
+
+muyiwa@Azure:~$ az container logs --resource-group skineticsResourceGroup --name skineticc0ntainer
+
+
+##Output
+
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:59 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://skinetic-demo.eastus.azurecontainer.io/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
+
+
+
+Attach Output Streams
+
+##Input
+
+muyiwa@Azure:~$ az container attach --resource-group skineticsResourceGroup --name skineticc0ntainer
+
+##Output
+
+Container 'skineticc0ntainer' is in state 'Running'...
+(count: 1) (last timestamp: 2021-12-21 12:52:43+00:00) Successfully pulled image "mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e"
+(count: 1) (last timestamp: 2021-12-21 12:52:43+00:00) pulling image "mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e"
+(count: 1) (last timestamp: 2021-12-21 12:54:05+00:00) Started container
+
+Start streaming logs:
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+::ffff:10.92.0.4 - - [21/Dec/2021:13:12:58 +0000] "GET / HTTP/1.1" 200 1663 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
+listening on port 80
+
+Cleanup Resources
+
+##Input
+
+muyiwa@Azure:~$ az container delete --resource-group skineticsResourceGroup --name skineticc0ntainer
+
+##Output
+
+Are you sure you want to perform this operation? (y/n): y
+
+{
+  "containers": [
+    {
+      "command": null,
+      "environmentVariables": [],
+      "image": "mcr.microsoft.com/azuredocs/aci-helloworld",
+      "instanceView": {
+        "currentState": {
+          "detailStatus": "",
+          "exitCode": null,
+          "finishTime": null,
+          "startTime": "2021-12-21T12:54:05.940000+00:00",
+          "state": "Running"
+        },
+        "events": [
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:52:43+00:00",
+            "lastTimestamp": "2021-12-21T12:52:43+00:00",
+            "message": "Successfully pulled image \"mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e\"",
+            "name": "Pulled",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:52:43+00:00",
+            "lastTimestamp": "2021-12-21T12:52:43+00:00",
+            "message": "pulling image \"mcr.microsoft.com/azuredocs/aci-helloworld@sha256:565dba8ce20ca1a311c2d9485089d7ddc935dd50140510050345a1b0ea4ffa6e\"",
+            "name": "Pulling",
+            "type": "Normal"
+          },
+          {
+            "count": 1,
+            "firstTimestamp": "2021-12-21T12:54:05+00:00",
+            "lastTimestamp": "2021-12-21T12:54:05+00:00",
+            "message": "Started container",
+            "name": "Started",
+            "type": "Normal"
+          }
+        ],
+        "previousState": null,
+        "restartCount": 0
+      },
+      "livenessProbe": null,
+      "name": "skineticc0ntainer",
+      "ports": [
+        {
+          "port": 80,
+          "protocol": "TCP"
+        }
+      ],
+      "readinessProbe": null,
+      "resources": {
+        "limits": null,
+        "requests": {
+          "cpu": 1.0,
+          "gpu": null,
+          "memoryInGb": 1.5
+        }
+      },
+      "volumeMounts": null
+    }
+  ],
+  "diagnostics": null,
+  "dnsConfig": null,
+  "encryptionProperties": null,
+  "id": "/subscriptions/d83f3218-7274-4344-9020-44061080a8df/resourceGroups/skineticsResourceGroup/providers/Microsoft.ContainerInstance/containerGroups/skineticc0ntainer",
+  "identity": null,
+  "imageRegistryCredentials": null,
+  "initContainers": [],
+  "instanceView": {
+    "events": [],
+    "state": "Running"
+  },
+  "ipAddress": {
+    "dnsNameLabel": "skinetic-demo",
+    "dnsNameLabelReusePolicy": "Unsecure",
+    "fqdn": "skinetic-demo.eastus.azurecontainer.io",
+    "ip": "20.83.143.103",
+    "ports": [
+      {
+        "port": 80,
+        "protocol": "TCP"
+      }
+    ],
+    "type": "Public"
+  },
+  "location": "eastus",
+  "name": "skineticc0ntainer",
+  "osType": "Linux",
+  "provisioningState": "Succeeded",
+  "resourceGroup": "skineticsResourceGroup",
+  "restartPolicy": "Always",
+  "sku": "Standard",
+  "subnetIds": null,
+  "tags": {},
+  "type": "Microsoft.ContainerInstance/containerGroups",
+  "volumes": null,
+  "zones": null
+}
+
+
+
+
+
+
+
+
